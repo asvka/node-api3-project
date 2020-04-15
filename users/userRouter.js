@@ -54,7 +54,7 @@ router.delete('/:id', validateUserId, (req, res, next) => {
     .catch((err) => next(err))
 });
 
-router.put('/:id', (req, res, next) => {
+router.put('/:id', validateUserId, validatePost, (req, res, next) => {
   userDb.update(req.params.id, req.body)
     .then((user) => {
       console.log(req)
