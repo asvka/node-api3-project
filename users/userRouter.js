@@ -3,7 +3,7 @@ const router = express.Router();
 const userDb = require('../users/userDb')
 const postDb = require('../posts/postDb')
 
-router.post('/', validateUser, (req, res) => {
+router.post('/', validateUser, (req, res, next) => {
   userDb.insert(req.body)
     .then((user) => {
       res.status(201).json(user)
@@ -12,16 +12,11 @@ router.post('/', validateUser, (req, res) => {
 })
 
 router.post('/:id/posts', validatePost, validateUserId, (req, res, next) => {
-  console.log("console log");
   postDb.insert({ ...req.body, user_id: req.params.id })
     .then((post) => {
       return res.status(201).json(post)
     })
-    .catch((err) => {
-      res.status(500).json({
-        message: "Error"
-      }, err)
-    })
+    .catch((err) => {next(err)})
 });
 
 router.get('/', (req, res, next) => {
@@ -112,7 +107,6 @@ function validatePost(req, res, next) {
               message: "missing required text field"
           })
       }
-      // next();
 }
 
 

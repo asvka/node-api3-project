@@ -1,6 +1,6 @@
 const express = require('express')
 const server = require('./server')
-const port = 7777
+const port = process.env.PORT || 7777
 
 
 //listen
